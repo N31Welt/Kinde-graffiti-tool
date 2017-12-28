@@ -15,10 +15,11 @@ Quick Start :  n31_Kgr v0.1 ( Kindle Graffiti
 
 
 4. When 'as' button is checked, 'save' button function switch to save as mode
-    Click the arrow button to change file names.    ( ↑ prevent overwrite ↑ )
+    Click the arrow button to change file names.    
+    ( ↑ prevent overwrite ↑ )
     
 
-5. When 'as' button is unchecked, save file directly.    ( allow overwrite )
+5. When 'as' button is unchecked, save file directly.  ( allow overwrite )
 
 
 6. Images file path is ( open and save ) : /mnt/us/extensions/n31_Kgr/bin/pictures
