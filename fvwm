@@ -1,0 +1,306 @@
+
+  
++ "StaysOnTop"          Pick (CirculateHit) Layer 0 6
++ "StaysPut"            Pick (CirculateHit) Layer 0 4
++ "StaysOnBottom"       Pick (CirculateHit) Layer 0 2
+
++ "Desk 2"	MoveToDesk 0 2
++ "Page (0,0)"	MoveToPage 0 0
+
+Mouse 1	T    A RaiseMoveX Move Maximize
+Mouse 1	R    A Menu MenuFvwmRoot
+Mouse 2	R    A WindowList
+Mouse 3	R    A Menu MenuWindowOpsLong
+Mouse 1	I    A RaiseMoveX Move "Iconify off"
+
+ButtonStyle All - Clear
+ButtonStyle 1 - MwmDecorMenu
+ButtonStyle 4 - MwmDecorMax
+ButtonStyle 6 - MwmDecorMin
+
+# This function will toggle if fvwm shows the TitleBar.
+DestroyFunc ToggleTitle
+AddToFunc   ToggleTitle
++ I ThisWindow (State 1) WindowStyle Title
++ I TestRc (Match) State 1 False
++ I TestRc (Match) Break
++ I WindowStyle !Title
++ I State 1 True
+
+
+DestroyFunc RaiseMoveX
+AddToFunc RaiseMoveX
++ I Raise
++ M $0
++ D $1
+
+DestroyFunc RaiseMove
+AddToFunc RaiseMove
++ I Raise
++ M $0
+
+DestroyFunc MoveToCurrent
+AddToFunc MoveToCurrent
++ I ThisWindow MoveToPage
++ I ThisWindow MoveToDesk
+
+
+# 5: Mouse and Key bindings
+#
+# Contexts:
+#     R = Root Window                 rrrrrrrrrrrrrrrrrrrrrr
+#     W = Application Window          rIrrrr<---------^rrrrr
+#     F = Frame Corners               rrrrrr[13TTTT642]rrrrr
+#     S = Frame Sides                 rIrrrr[wwwwwwwww]rrrrr
+#     T = Title Bar                   rrrrrr[wwwwwwwww]rrrrr
+#     I = Icon                        rIrrrrv_________>rrrrr
+#                                     rrrrrrrrrrrrrrrrrrrrrr
+#
+#     Numbers are buttons: [1 3 5 7 9  TTTTT  0 8 6 4 2]
+#
+# Modifiers: (A)ny, (C)ontrol, (S)hift, (M)eta, (N)othing
+#
+# Format: Key <X>  <Context> <Modifier> <Action>
+#         Mouse <X> <Context> <Modifier> <Action>
+  Mouse 	8	R 	A       PickWindow		
+
+
+# Startup Sript
+  DestroyFunc InitFunction
+  AddToFunc InitFunction
+ 	+ I Test (F $[FVWM_USERDIR]/autostart)\
+		Exec exec /bin/sh $[FVWM_USERDIR]/autostart
+
+# Alt + Tab Cycles between windows 
+Key 		Tab 	A 	M 	Next (CurrentPage, !Iconic, !Shaded, AcceptsFocus) CirculateFocus
+Key 		Tab 	A 	SM 	Prev (CurrentPage, !Iconic, !Shaded, AcceptsFocus) CirculateFocus
+
+
+#Key Tab A M Menu MenuWindowList Root c c
+Key Tab A M WindowList Root c c CurrentDesk, NoGeometry, CurrentAtEnd, IconifiedAtEnd
+
+
+# Super-Shift + Arrow tiles window to screen quarter
+  Key 		Up     	A 	S4 	TileTopLeft
+
+
+# Ctrl-Super + Arrow resizes window by 10 lines 
+  Key 		Left  	A 	C4 	DecHorizontalSize
+
+https://docs.huihoo.com/homepage/shredderyin/fvwm_frame.html 
+https://github.com/DavidAlphaFox/fvwm_dots/blob/master/sehnsucht_dots/fvwm/config
+# XF86/Fn Keyboard Symbols bindings
+  Key XF86AudioMute 	   A N Exec exec mixer -f dev/mixer vol 0:0 > /dev/null 2>&1
+  Key XF86AudioLowerVolume A N Exec exec mixer -f /dev/mixer vol -5:-5 > /dev/null 2>&1
+  Key XF86AudioRaiseVolume A N Exec exec mixer -f /dev/mixer vol +5:+5 > /dev/null 2>&1
+  Key XF86AudioPlay        A N Exec exec mpc play > /dev/null 2>&1
+  Key XF86AudioStop        A N Exec exec mpc pause > /dev/null 2>&1
+  Key XF86AudioPrev        A N Exec exec mpc prev > /dev/null 2>&1
+  Key XF86AudioNext        A N Exec exec mpc next > /dev/null 2>&1
+  key XF86WWW              A N Exec exec seamonkey
+  key XF86Terminal         A N Exec exec urxvtc -pe tabbed
+  key XF86Go               A N Exec exec rofi -show run
+  Key XF86Mail             A N Exec exec sylpheed
+  Key XF86HomePage         A N Exec exec pcmanfm
+  Key XF86Sleep            A N Exec exec acpiconf -s3 > /dev/null 2>&1
+  Key XF86LogOff           A N Exec exec xscreensaver-command -lock
+
+
+Key Print A A Exec $[scripts]/screeny
+
+
++	"&Files"%devices/hdd_mount.png%									Popup MenuDisk
+Mouse 1		T	N	TransitMove
+
+
+
+SetEnv fvwm_cache $[HOME]/.fvwm.cache
+SetEnv fvwm_userdir $[HOME]/.fvwm
+SetEnv fvwm_images $[fvwm_userdir]/images
+SetEnv fvwm_wallpaper $[fvwm_userdir]/images/wallpapers/4800x3600-haven-i-see-stars.png
+Setenv fvwm_colors $[HOME]/.fvwm/images/colors
+ModulePath $[fvwm_userdir]:$[fvwm_userdir]/modules:+
+
+
+SetEnv FVWM_TERMINAL xterm
+SetEnv FVWM_EDITOR gvim
+SetEnv FVWM_BROWSER chromium
+SetEnv FVWM_FILER pcmanfm
+SetEnv FVWM_AUDIO deadbeef
+SetEnv FVWM_VIDEO vlc
+SetEnv FVWM_DOCK_ICON_SIZE 48
+SetEnv FVWM_DESKTOP_MAX 8
+SetEnv FVWM_FONT_NAME sans
+SetEnv FVWM_FONT_SIZE 7.5
+SetEnv FVWM_ICON_SIZE 48
+SetEnv FVWM_PANEL_HEIGHT 24
+SetEnv FVWM_PANEL_DARK false
+SetEnv FVWM_THUMBNAIL_SIZE 128
+SetEnv FVWM_BACKGROUNDS '$[HOME]/.backgrounds'
+#PipeRead 'echo SetEnv FVWM_STRUT_LEFT $(($[FVWM_ICON_SIZE]+20))'
+#SetEnv FVWM_STRUT_RIGHT 10
+#PipeRead 'echo SetEnv FVWM_STRUT_TOP $(($[FVWM_PANEL_HEIGHT]+10))'
+#SetEnv FVWM_STRUT_BOTTOM 10
+SetEnv FVWM_FONT 'xft:$[FVWM_FONT_NAME]:size=$[FVWM_FONT_SIZE]:bold:antialias=True'
+
+SetEnv FVWM_CLOSE_BUTTON 2
+SetEnv FVWM_MAXIMIZE_BUTTON 4
+SetEnv FVWM_MINIMIZE_BUTTON 6
+
+
+
+
+# ===========================================================================
+# Cursor Styles
+# ===========================================================================
+
+CursorStyle DEFAULT left_ptr
+CursorStyle MENU left_ptr
+CursorStyle TITLE left_ptr
+CursorStyle WAIT watch
+
+BusyCursor Read off
+
+
+
+
+###########
+SetEnv fvwm_home ~/.fvwm
+SetEnv fvwm_scrpt ~/.fvwm/scripts
+SetEnv fvwm_themes ~/.fvwm/themes
+SetEnv fvwm_icon /usr/share/icons/wm-icons
+
+SetEnv fvwm_font -*-terminus-medium-r-*-*-12-*-*-*-*-*-*-*
+SetEnv fvwm_small_font -*-fixed-*-*-*-*-7-*-*-*-*-*-*-*
+SetEnv fvwm_tiny_font -*-fixed-*-*-*-*-6-*-*-*-*-*-*-*
+SetEnv fvwm_terminal_font xft:terminus:pixelsize=18
+SetEnv fvwm_default_font -*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*
+SetEnv fvwm_times_font -*-times-*-r-*-*-12-*-*-*-*-*-*-*
+SetEnv fvwm_title_font Shadow=2:-*-terminus-bold-r-*-*-18-*-*-*-*-*-*-*
+SetEnv fvwm_menu_font Shadow=1:-*-terminus-medium-r-*-*-16-*-*-*-*-*-*-*
+
+
+Style * Font $[fvwm_default_font]
+DefaultFont $[fvwm_default_font]
+
+
+
+
+
+
+
+# Recall that mouse formats look like this:
+#
+# +------------+
+# | ||  ||  || |
+# |            |
+# +------------+
+#   1   2   3
+
+# Binding Functions
+#
+# "I" stands for Immediate
+# "M" stands for Motion
+# "C" stands for Click
+# "H" stands for Hold
+# "D" stands for Double Click
+
+# -------------------------------------------------------------
+# Contexts:
+#     R = Root Window                 rrrrrrrrrrrrrrrrrrrrrr
+#     W = Application Window          rIrrrrFSSSSSSSSSFrrrrr
+#     F = Frame Corners               rrrrrrS13TTTT642Srrrrr
+#     S = Frame Sides                 rIrrrrSwwwwwwwwwSrrrrr
+#     T = Title Bar                   rrrrrrSwwwwwwwwwSrrrrr
+#     I = Icon                        rIrrrrFSSSSSSSSSFrrrrr
+#                                     rrrrrrrrrrrrrrrrrrrrrr
+# Numbers are buttons: 1 3 5 7 9   0 8 6 4 2
+#
+# Modifiers: (A)ny, (C)ontrol, (S)hift, (M)eta, (N)othing
+# -------------------------------------------------------------
+
+
+
+AddToFunc SwitchWindow
++ I $[DIR] (CurrentPage, !Iconic, !Sticky) FocusRaiseAndStuff
++ I Deschedule 134000
++ I PipeRead `[ "$[DIR]" == "Prev" ] && \
+	echo 'SetEnv NDIR Next' || \
+	echo 'SetEnv NDIR Prev'`
++ I Schedule 700 134000 SetEnv DIR $[NDIR]
+
+
+DestroyFunc DeThumbnail
+AddToFunc   DeThumbnail
++ I PipeRead "echo WindowStyle IconOverride, Icon \\$\\[Icon-$[w.id]\\]"
++ I UnsetEnv Icon-$[w.id]
++ I Exec exec "rm -f /dev/shm/icon.tmp.$[w.id].png"
+
+DestroyFunc FvwmClose
+AddToFunc   FvwmClose
++ H Nop
++ M Nop
++ C Close $0 $1
+
+DestroyFunc FvwmMaximize
+AddToFunc   FvwmMaximize
++ H Nop
++ M Nop
++ C Maximize $0 $1
+
+SetEnv kcalc "/usr/bin/kcalc"
+SetEnv xkill "/usr/bin/xkill"
+
+
+DestroyFunc LimitApplication
+AddToFunc   LimitApplication
+    + I Any ($0, CurrentDesk) FlipFocus
+    + I TestRc (NoMatch) None ($0, CurrentDesk) Exec exec $0
+     
+AddToFunc ToggleXterm
++ I All (my_xtermwindow) Close
++ I TestRc (NoMatch) Exec xterm -T my_xtermwindow
+
+
+DestroyMenu MenuFvwmWindowOps
+AddToMenu MenuFvwmWindowOps
++   "Move To Desk"      Popup MenuDeskList
++   ""  Nop
++   "Shade/Unshade"     Pick WindowShade Toggle
++   "Iconify"           Pick Iconify
++   "Maximize"          Pick Maximize
++   ""  Nop
++   "Raise/Lower"       Pick RaiseLower
++   "Stick/Unstick"     Pick Stick
++   ""  Nop
++   "Identify"          Pick Module FvwmIdent
++   ""  Nop
++   "Close"             Pick Close
++   "Destroy"           Pick Destroy
+
+DestroyFunc 	LockScreen
+AddToFunc 		LockScreen
++ I Next (FvwmButtons, State 0) EdgeThickness 1
++ I Next (FvwmButtons) State 0
++ I Next (FvwmButtons, State 0) EdgeThickness 0
+
+
+
+DestroyFunc BGC_Hide
+AddToFunc BGC_Hide
++ I All (urxvt.bgc) WindowShade true
+#+ I All (urxvt.bgc) MoveToDesk 0 666 
++ I All (urxvt.bgc) Iconify true 
++ I All (urxvt.bgc) WindowStyle WindowListSkip, CirculateHit
++ I None (CurrentPage, Focused) Prev (CurrentPage, !iconic, AcceptsFocus) FlipFocus
+
+
+DestroyFunc RaiseMaximize
+AddToFunc RaiseMaximize
++ I Raise
++ I Maximize $[*]
+
+Key Tab A M Next (CurrentDesk !Iconic) Focus
+
+https://github.com/mrtycho/fvwm-config/blob/master/config
+https://github.com/somiaj/pyFvwm
