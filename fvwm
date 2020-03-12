@@ -1,5 +1,3 @@
-
-  
 + "StaysOnTop"          Pick (CirculateHit) Layer 0 6
 + "StaysPut"            Pick (CirculateHit) Layer 0 4
 + "StaysOnBottom"       Pick (CirculateHit) Layer 0 2
@@ -304,3 +302,236 @@ Key Tab A M Next (CurrentDesk !Iconic) Focus
 
 https://github.com/mrtycho/fvwm-config/blob/master/config
 https://github.com/somiaj/pyFvwm
+https://github.com/abelardojarab/fvwm/blob/master/.fvwm2rc
+
+https://forum.ubuntu.org.cn/viewtopic.php?f=168&t=320096&hilit=FVWM
+Read fvwm.strokes
+
+
+2.3 使用systemd-networkd替代networkmanager
+systemctl stop NetworkManager
+systemctl enable systemd-networkd
+systemctl start systemd-networkd
+
+
+(222 的 4 次方) 减 (183 的 3 次方) 减 (730 的 2 次方) 减 (18 的 4 次方) 减 (7 的 5 次方) 减 (每年天数)
+(222**4) - (183**3) - (730**2) - (18**4) - (7**5) - (365)
+
+
+print( (222**4) - (183**3) - (73**2) - (18**4) - (7**5) - (365) )
+https://www.cnblogs.com/bu-wu-zheng-ye/p/4760919.html
+# Avoid full screen window to overlap a task bar (for instance)
+EwmhBaseStruts  0 0 24 0
+IgnoreModifiers L25
+SnapAttraction * 10
+
+
+#+ I exec exec synapse
++ I exec nm-applet
+#+ I Exec tint2
+
+
+DestroyFunc SwitchWindows
+AddToFunc   SwitchWindows
++ I Next (AcceptsFocus, CurrentDesk, CurrentPage) Focus
++ I Prev (AcceptsFocus, CurrentDesk, CurrentPage) WarpToWindow 
+
+DestroyFunc SwitchWindows
+AddToFunc   SwitchWindows
++ I Next (AcceptsFocus, CurrentDesk, CurrentPage) Focus
++ I Prev (AcceptsFocus, CurrentDesk, CurrentPage) WarpToWindow 
+
+
+#MutilMedia Key
+key XF86AudioLowerVolume A A Exec exec amixer set Master 5%- unmute
+key XF86AudioRaiseVolume A A Exec exec amixer set Master 5%+ unmute
+key XF86AudioMute A A Exec exec amixer set Master toggle
+#key XF86AudioPlay A A Music-Play程序
+#Key XF86AudioPause A A Music-Pause
+#Use Mouse to control volumn
+Mouse 4 WTSFI 4 Exec exec amixer set Master 5%+ unmute
+Mouse 5 WTSFI 4 Exec exec amixer set Master 5%- unmute
+
+# Mouse Gesture Binding
+Mouse 2 T A WindowList
+# Mouse gestures for pager
+#Stroke N456    0   R N exec exec $[fvwm_goleft]
+#Stroke N654    0   R N exec exec $[fvwm_goright]
+
+
+需要安装的一些软件
+图像浏览:feh
+Quick Launcher:rofi
+Tray:stalonetray
+Terminal:Guake ,terminator
+
+ClickTime 350   ##fvwm考虑鼠标click的时间，按下于弹出之间大于350ms，认为是hold.小于350ms就是click.
+MoveThreshold 3   ##控制移动窗口和图标的拖动操作的灵敏度。 该资源值是移动操作触发前定位器按下按钮移动的像素量。 这用于防止单击或双击时的窗口和图标的移动，这里的移动是指按钮按下时无意识的指针移动。
+
+EdgeScroll 100 100   ##定义了当你的鼠标移动到屏幕边缘的时候，屏幕滚动的百分率。这里表示鼠标移动到屏幕边缘屏幕100％的滚动到下一个屏幕。
+EdgeResistance 150  150   ##EdgeResistance scrolling moving
+这是用来设定当滑鼠游标碰触到萤幕的边界的时候，FVWM应该要如
+何动作。scrolling 是告诉FVWM当滑鼠游标碰触到萤幕边界多少
+
+#EdgeScroll 设置拖动窗口到桌面左右两边上时，百分之多少的桌面开始滚动切换到下一个。0表示不滚动。
+#EdgeResistance scrolling moving 这是用来设定当滑鼠游标碰触到萤幕的边界的时候，FVWM应该要如何动作。scrolling 是告诉FVWM当滑鼠游标碰触到萤幕边界多少milliseconds之後，才会移动目前的工作桌面。moving则是设定当视窗超出画面多少像点之後，才要切换目前的工作桌面到别的桌面上。
+#EdgeThickness 设置当 EdgeScroll 效果出现的时候，桌面的周围显示的边框线的像素。
+
+# 窗口最小化后图标放置位置
+# icons  - should go to top left
+Style * IconBox 30 100 100 -15, IconFill top left
+# 不要图标标题
+Style * NoIconTitle
+# Style * IconTitle, IndexedIconName
+# Style * IconTitleColorset 3, HilightIconTitleColorset 3
+# Style * IconTitleRelief 0
+# !Iconifiable表示不会被最小化
+# 应用程序替换图标
+Style "matlab" Icon matlab.png, IconOverride
+Style "eio" Icon ooo-writer.png, IconOverride
+Style "emacs23" Icon gnome-emacs.png, IconOverride
+
+
+# R 表示是root window，也就是整个背景萤幕。
+# W 表示在视窗上面。
+# T 表示在Title Bar上面，也就是显示视窗标题的地方。
+# S 表示在在视窗四周的边框上面。
+# F 表示在视窗的四角上面。
+# I 表示在Icon上面。
+# A 表示在Title Bar以外的任何地方。
+
+# 窗体出现时尽量不挡住其它的窗体
+Style * TileCascadePlacement
+
+单独的Fn不会产生按键事件。你可以运行xev，然后按Fn+F2，看其对应了什么键，一般是以XF86开头的，比如XF86Battery、XF86ScreenSaver之类，然后直接写
+Key XF86XXXXX A A DoSomething
+xev
+xmodmap-->
+打开一个 rxvt/xterm/konsole/gnome-terminal ，或者你喜欢的 X 下的终端，在里面运行 xev ，然后会打开一个窗口，把鼠标移进去，停住鼠标后，按 a 键（按下后立即松开），会发现类似的信息：
+        代码:
+
+
+
+
+Mouse 2 R A StrokeFunc DrawMotion
+Mouse 2 W 4 StrokeFunc DrawMotion
+Stroke N852 0 A A Exec exec urxvtc
+Stroke N258 0 A A JOE Firefox "firefox"
+Stroke N14789 0 A A Exec exec rox
+Stroke N456 0 A A GoTodesk 1 0 0 4
+Stroke N654 0 A A GoTodesk -1 0 0 4
+Stroke N25852 0 A A Exec exec notecase ~/note/notecase.ncd
+
+sudo su
+echo 0 > /sys/class/backlight/acpi_video0/brightness
+
+
+Re: fvwm怎么轮询窗口？
+#2帖子 由 eexpress » 2013-12-13 2:38
+Mouse 1 R N FvwmRearrange -tile -u -mn 2 -resize -m 2 2 98 98
+
+
+用Alt+Tab切换窗口
+IgnoreModifiers L25              # 这是忽略 CapsLock, NumLock, ScrollLuck 以避免快捷键失效。
+Key Tab A M WindowList Root c c NoDeskSort
+
+
+
+
+按照原贴的思路修改了一下,下面的是个能正常工作的函数(确保State 2没有被占用)
+代码： 全选
+
+DestroyFunc SwitchWindow
+AddToFunc SwitchWindow
++ I All (State 2, Maximized) Maximize off
++ I All (State 2) State 2 false
++ I Next (AcceptsFocus CurrentDesk CurrentPage !Iconic) State 2
++ I All (State 2) Focus
++ I All (State 2) ResizeMoveMaximize 80 80 10% 10%
++ I All (State 2) Raise
+
+#使用EdgeScroll命令禁止flipping pages（鼠标不会因为接近屏幕边缘而进入相近的桌面
+EdgeScroll 0 0
+
+Mouse 1 4 A Iconify 是缩小。
+Mouse 1 I A Iconify off 才是在图标上点击，恢复。
+
+
+#Context: A:除过标题栏按钮外的任意区域
+#  R:代表根窗口(也就是桌面)
+#  T:代表标题栏
+#  S:代表边框
+#  F:代表窗口的四个角
+#  W:代表窗口的客户区域
+#  I:代表图标
+#  n:
+#    ##############################
+#    1 3 5 7 9            0 8 6 4 2
+#    ##############################
+#    (0<=n<=9)窗口的标题栏上的按钮位置,靠左侧的是(1 3 5 7 9)
+#    靠右侧的是(0 8 6 4 2)例如常见的MS-Windows的最小化按钮是
+#    6,最大化是4,关闭是2,系统菜单是1
+Swallow 这是FvwmButtons一个神奇的功能，可以把其他X程 序或者Fvwm模块吞进按钮中，比如在按键中显示Pager，时钟以及系统监控等。
+
+
+x 和 y 是相对于 context-rectangle 默认位置的偏移，默认情况下 x 和 y 指的是相应内容矩形宽和长的百分比，如果数值后加上 m, 则表示要显示菜单 宽和长的百分比，如果以 p 结尾，则数值指的是像素。如果数值前有 o<N> ,则 表示在其他位移发生前先将菜单的百分之N的像素和矩形的百分之N重叠在一 起。可以用 c 表示 o50。
+
+6.10.2 程序菜单
+菜单的定义非常简单，但是如果你安装一个软件就要修改一次Fvwm的配置文件的 话，反而麻烦了，所以为了之后的不麻烦，我宁愿现在麻烦点。我要自动把安装 的软件添加到程序菜单中，必须要仰仗 update-menus 这个脚本，update-menus 依赖于menu，所以你必须安装它才能工作。另外，还要进行一行必要的设置：
+
+打开/etc/menu-methods/fvwm，修改 rootsection=""，下次运行 update-menus 在.fvwm/下生成的menudefs.hook中的菜单就可怪挂在二 级菜单下。
+通常debian仓库中的包会在/usr/share/menu目录下添加menu所需的配 置，如 果打包者没有添加或者你是手动编译安装软件，则需在此目录 下手动添 加相应的配置文件。配置文件的格式请查看手册。
+要特别注意的是，update-menus在默认情况下会检查dpkg数据库的， 如果不是 通过apt或者dpkg安装的软件包，即使在此目录下添加了配 置文件，也不 会为其生成菜单，所以在fvwm2rc中要用"update-menus –nodpkgcheck"
+
+PipeRead command [quiet] Fvwm用PipeRead 从shell命令 的输出中读入数据，如果command由多个单词构成，则要用引号括起来，从文 件目录动态创建菜单要用到此方法。如果command 后跟上Quiet关键字，当找 不到命令时不会产生告警。
+
+$[gt.str]、$[w.id]、$[w.name] 你可能会在很多 配置文件中看到这样形式的东西，这叫做命令扩展（command expansion）， $[gt.str]根据当前Locale将str翻译成本地字符串，$[w.id]返回窗口的id， $[w.name]返回窗口的名称。详细请 man fvwm。
+
+EWMH 是 EXTENDED WINDOW MANAGER HINTS 的缩写，不知如何 译成中文，它是一种窗口管理的标准，用来说明屏幕上窗口工作区的范围。 Fvwm是支持此标准的。如果关闭EWMH支持，则窗口工作区是整个屏幕。
+
+DestroyFunc FuncDestroyOnHold
+AddToFunc   FuncDestroyOnHold
++ C Schedule 100 Close
++ H Destroy
++ H Beep
+
+
+FuncFvwmIconifyAll              ----  所有窗口最小化，显示桌面
+FuncFvwmShowMessage title msg   ----  在以title为标题的对话框中显示msg
+FuncFvwmWindowCreateScreenshot  ----  生成窗口快照并存在~/.fvwm/tmp文件夹下
+FuncFvwmDesktopCreateScreenshot ----  生成桌面快照并存在~/.fvwm/tmp文件夹下
+FuncFvwmViewInfo cmd            ----  在终端中查看命令cmd的info手册
+FuncFvwmViewManPage cmd         ----  在终端中查看cmd的man手册
+FuncFvwmViewFile file           ----  在终端中用less查看文件file
+FuncFvwmEditFile file           ----  检查可用是编辑器并打开文件file
+FuncFvwmOpenURL url             ----  检查可用的浏览器并打开链接url
+FuncFvwmRunInXterm title cmd    ----  在终端中运行命令cmd
+
+
+DestroyFunc AutoHide
+AddToFunc   AutoHide
++ I ThisWindow ($0) Deschedule $[w.id]
++ I TestRc (!Match) Deschedule -$[w.id]
++ I ThisWindow ($0) ThisWindow (shaded) AutohideShow $1 $3
++ I TestRc (!Match) All ($0, !shaded) AutohideHide $2 $3
+
+DestroyFunc AutohideShow
+AddToFunc   AutohideShow
++ I Schedule $0 -$[w.id] WindowShade $1 off
++ I Schedule $0 -$[w.id] Raise
++ I Schedule $0 -$[w.id] Deschedule $[w.id]
++ I Schedule $0 -$[w.id] Deschedule -$[w.id]
+
+DestroyFunc AutohideHide
+AddToFunc   AutohideHide
++ I Schedule $0 $[w.id] WindowShade $1 on
++ I Schedule $0 $[w.id] Deschedule $[w.id]
++ I Schedule $0 $[w.id] Deschedule -$[w.id]
+
+# this one originates from ikaros configs iirc
+DestroyFunc FuncDockLaunch
+AddToFunc   FuncDockLaunch
++ C Any ($1) Next ($1) WindowListFunc
++ C TestRc (NoMatch) Exec $0
++ H Any ($1) WindowList ($1) Rectangle +$2+$3 0 -100m CurrentAtEnd UseListSkip SortByClass NoCurrentDeskTitle
++ D Exec $0
